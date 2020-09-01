@@ -8,6 +8,7 @@ import cart from "@/components/tabbar/cart.vue";
 import user from "@/components/tabbar/user.vue";
 import elec from "@/components/grid/elec.vue";
 import news from "@/components/grid/news.vue";
+import photo from "@/components/grid/photo.vue";
 import newsDetail from "@/components/detail/newsDetail.vue";
 import goodsDetail from "@/components/detail/goodsDetail.vue";
 import addr from "@/components/user/addr.vue";
@@ -21,6 +22,7 @@ const router = new VueRouter({
         {path: '/user', component: user},
         {path: '/elec', component: elec},
         {path: '/news', component: news},
+        {path: '/photo', component: photo},
         {path: '/newsDetail/:newsId', component: newsDetail},
         {path: '/goodsDetail/:goodsId', component: goodsDetail},
         {path: '/addr', component: addr},

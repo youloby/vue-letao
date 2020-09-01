@@ -4,7 +4,7 @@
             <van-swipe-item v-for="item in imgs" :key="item.src">
                 <img :src="item.src">
             </van-swipe-item>
-            <van-swipe-item v-show="isEmpty">
+            <van-swipe-item v-if="isEmpty">
                 <van-empty image="error" />
             </van-swipe-item>
         </van-swipe>
@@ -52,7 +52,6 @@ export default {
         return {
             imgs: [],
             goods: "",
-            emptyImg: [{src: "http://test.w0824.com/empty-image-error.png"}],
             count: 1,
             cartCount: 0,
             isEmpty: false
@@ -63,8 +62,6 @@ export default {
             let goodsId = this.$route.params.goodsId;
 
             let {message} = await getthumbimages(goodsId);
-            console.log(goodsId);
-            console.log(message);
             let isLength = message.length!=0;
             this.imgs = isLength ?message :[];
             this.isEmpty = !isLength;
@@ -106,11 +103,11 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .goods-detail-container {
         padding: 5px 5px 100px 5px;
 
-        .my-swipe .van-swipe-item {
+        .my-swipe .van-swipe-item, .van-empty {
             height: 240px;
             color: #fff;
             font-size: 20px;
@@ -118,7 +115,7 @@ export default {
             text-align: center;
             border-radius: 5px;
             background-color: #fff;
-            img .van-empty {
+            img {
                 width: 245px;
                 height: 240px;
             }
@@ -158,8 +155,14 @@ export default {
             .item-info {
                 color: #333;
                 font-size: 16px;
-                img {
+                /deep/ img {
                     width: 100%;
+                }
+                /deep/ table {
+                    width: 100%;
+                    img {
+                        width: 100%;
+                    }
                 }
             }
         }

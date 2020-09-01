@@ -47,7 +47,7 @@ export default {
             gridData: [
                 {img:require("@/assets/images/menu10.png"), font:"数码电器", url:"/elec"},
                 {img:require("@/assets/images/menu19.png"), font:"乐淘头条", url:"/news"},
-                {img:require("@/assets/images/menu18.png"), font:"美图欣赏", url:"/elec"},
+                {img:require("@/assets/images/menu18.png"), font:"美图欣赏", url:"/photo"},
                 {img:require("@/assets/images/menu15.png"), font:"乐淘服饰", url:"/elec"},
                 {img:require("@/assets/images/menu12.png"), font:"9.9元拼单", url:"/elec"},
                 {img:require("@/assets/images/menu13.png"), font:"乐淘超市", url:"/elec"},

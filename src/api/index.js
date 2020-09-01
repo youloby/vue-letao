@@ -28,8 +28,8 @@ export async function postcomment(newsId, content){
     return await instance.post(`/postcomment/${newsId}`, {content});
 }
 
-export async function getthumbimages(goodsId){
-    return await instance.get(`/getthumbimages/${goodsId}`);
+export async function getthumbimages(id){
+    return await instance.get(`/getthumbimages/${id}`);
 }
 
 export async function getgoodsinfo(goodsId){
@@ -38,4 +38,13 @@ export async function getgoodsinfo(goodsId){
 
 export async function getshopcarlist(ids){
     return await instance.get(`/getshopcarlist/${ids}`);
+}
+
+//获取图片分享数据
+export async function getcategory(){
+    return await instance.get('/getcategory');
+}
+
+export async function getcatelist(id){
+    return await instance.get(`/getcatelist/${id}`);
 }

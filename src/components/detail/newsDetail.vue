@@ -112,6 +112,17 @@ export default {
                 font-size: 13px;
                 color: #888;
             }
+            /deep/ .content {
+                table {
+                    width: 100%;
+                    img {
+                        width: 100%;
+                    }
+                }
+                img {
+                    width: 100%;
+                }
+            }
         }
         .comments {
             display: flex;
