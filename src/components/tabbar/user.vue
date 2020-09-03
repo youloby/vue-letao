@@ -17,28 +17,28 @@
 </template>
 
 <script>
-import { Cell, CellGroup, Button, Dialog, Toast } from 'vant';
+import { Cell, CellGroup, Button, Dialog, Toast } from 'vant'
 export default {
-    created(){
-        this.$parent.title = "个人中心";
-    },
-    components: {
-        "van-cell": Cell,
-        "van-cell-group": CellGroup,
-        "van-button": Button
-    },
-    methods: {
-        logout(){
-            Dialog.confirm({
-                message: '确认退出登录？',
-                confirmButtonColor: "#1989fa"
-            }).then(() => {
-                Toast("确认");
-            }).catch(() => {
-                Toast("取消");
-            });
-        }
+  created () {
+    this.$parent.title = '个人中心'
+  },
+  components: {
+    'van-cell': Cell,
+    'van-cell-group': CellGroup,
+    'van-button': Button
+  },
+  methods: {
+    logout () {
+      Dialog.confirm({
+        message: '确认退出登录？',
+        confirmButtonColor: '#1989fa'
+      }).then(() => {
+        Toast('确认')
+      }).catch(() => {
+        Toast('取消')
+      })
     }
+  }
 }
 </script>
 

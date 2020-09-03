@@ -15,56 +15,43 @@
             <router-view></router-view>
         </div>
 
-
         <van-tabbar v-model="active" v-show="!isUser">
             <van-tabbar-item icon="wap-home-o" to="/home">首页</van-tabbar-item>
-            <van-tabbar-item icon="cart-o" to="/cart" :badge="cartCount">购物车</van-tabbar-item>
+            <van-tabbar-item icon="cart-o" to="/cart" :badge="$store.getters.totalCount">购物车</van-tabbar-item>
             <van-tabbar-item icon="user-o" to="/user">我的乐淘</van-tabbar-item>
         </van-tabbar>
     </div>
 </template>
 
 <script>
-import { Search, Tabbar, TabbarItem, NavBar, Toast, Sticky } from 'vant';
+import { Search, Tabbar, TabbarItem, NavBar, Sticky } from 'vant'
 
 export default {
-    data(){
-        return {
-            active: 0,
-            title: "",
-            cartCount: 0,
-            userPath: ['/user', '/addr']
-        }
-    },
-    computed: {
-        isHome(){
-            return this.$route.path == '/home';
-        },
-        isUser(){
-            return this.userPath.includes(this.$route.path);
-        }
-    },
-    components: {
-        "van-search": Search,
-        "van-tabbar": Tabbar,
-        "van-tabbar-item": TabbarItem,
-        "van-nav-bar": NavBar,
-        "van-sticky": Sticky
-    },
-    methods: {
-        getCartCount(){
-            this.cartCount = 0;
-            let cartlist = JSON.parse(localStorage.getItem("cartlist")) || [];
-            cartlist.map(cart => this.cartCount +=cart.count);
-            return this.cartCount;
-        }
-    },
-    beforeCreate(){
-        document.getElementsByTagName('body')[0].setAttribute("style", "background-color:#eee");
-    },
-    created(){
-        this.getCartCount();
+  data () {
+    return {
+      active: 0,
+      title: '',
+      userPath: ['/user', '/addr', '/goodsDetail']
     }
+  },
+  computed: {
+    isHome () {
+      return this.$route.path === '/home'
+    },
+    isUser () {
+      return this.userPath.includes(/\/\w+\/?/.exec(this.$route.path)[0])
+    }
+  },
+  components: {
+    'van-search': Search,
+    'van-tabbar': Tabbar,
+    'van-tabbar-item': TabbarItem,
+    'van-nav-bar': NavBar,
+    'van-sticky': Sticky
+  },
+  beforeCreate () {
+    document.getElementsByTagName('body')[0].setAttribute('style', 'background-color:#eee')
+  }
 }
 </script>
 

@@ -37,7 +37,7 @@
 
         <van-goods-action>
             <van-goods-action-icon icon="chat-o" text="客服" dot />
-            <van-goods-action-icon icon="cart-o" text="购物车" :badge="cartCount" to="/cart" />
+            <van-goods-action-icon icon="cart-o" text="购物车" :badge="$store.getters.totalCount" to="/cart" />
             <van-goods-action-button type="warning" text="加入购物车" @click="addCart" />
             <van-goods-action-button type="danger" text="立即购买" />
         </van-goods-action>
@@ -45,67 +45,59 @@
 </template>
 
 <script>
-import { Swipe, SwipeItem, Divider, Stepper, GoodsAction, GoodsActionIcon, GoodsActionButton, Empty } from 'vant';
-import { getgoodsinfo, getthumbimages } from '@/api/index.js';
+import { Swipe, SwipeItem, Divider, Stepper, GoodsAction, GoodsActionIcon, GoodsActionButton, Empty } from 'vant'
+import { getgoodsinfo, getthumbimages } from '@/api/index.js'
 export default {
-    data(){
-        return {
-            imgs: [],
-            goods: "",
-            count: 1,
-            cartCount: 0,
-            isEmpty: false
-        }
-    },
-    methods: {
-        async getgoodsData(){
-            let goodsId = this.$route.params.goodsId;
-
-            let {message} = await getthumbimages(goodsId);
-            let isLength = message.length!=0;
-            this.imgs = isLength ?message :[];
-            this.isEmpty = !isLength;
-
-            let info = await getgoodsinfo(goodsId);
-            this.goods = info.message;
-
-        },
-        addCart(){
-            let cartlist = JSON.parse(localStorage.getItem("cartlist")) || [];
-            let index = cartlist.findIndex(cart => cart.id == this.goods.id);
-            if(index == -1){
-                cartlist.push({'id': this.goods.id, 'count': this.count, 'checked':false});
-            } else{
-                cartlist[index].count += this.count;
-            }
-            localStorage.setItem("cartlist", JSON.stringify(cartlist));
-            this.getCartCount();
-        },
-        getCartCount(){
-            this.cartCount = this.$parent.getCartCount();
-        }
-    },
-    created(){
-        this.$parent.title = "商品详情";
-        this.getgoodsData();
-        this.getCartCount();
-    },
-    components: {
-        "van-swipe": Swipe,
-        "van-swipe-item": SwipeItem,
-        "van-divider": Divider,
-        "van-stepper": Stepper,
-        "van-goods-action": GoodsAction,
-        "van-goods-action-icon": GoodsActionIcon,
-        "van-goods-action-button": GoodsActionButton,
-        "van-empty": Empty
+  data () {
+    return {
+      imgs: [],
+      goods: '',
+      count: 1,
+      isEmpty: false
     }
+  },
+  methods: {
+    async getgoodsData () {
+      const goodsId = this.$route.params.goodsId
+
+      const { message } = await getthumbimages(goodsId)
+      const isLength = message.length !== 0
+      this.imgs = isLength ? message : []
+      this.isEmpty = !isLength
+
+      const info = await getgoodsinfo(goodsId)
+      this.goods = info.message
+    },
+    addCart () {
+      const goods = {
+        id: this.goods.id,
+        count: this.count,
+        price: this.goods.sell_price,
+        checked: false
+      }
+      this.$store.commit('addCart', goods)
+    }
+  },
+  created () {
+    this.$parent.title = '商品详情'
+    this.getgoodsData()
+  },
+  components: {
+    'van-swipe': Swipe,
+    'van-swipe-item': SwipeItem,
+    'van-divider': Divider,
+    'van-stepper': Stepper,
+    'van-goods-action': GoodsAction,
+    'van-goods-action-icon': GoodsActionIcon,
+    'van-goods-action-button': GoodsActionButton,
+    'van-empty': Empty
+  }
 }
 </script>
 
 <style lang="scss" scoped>
     .goods-detail-container {
-        padding: 5px 5px 100px 5px;
+        padding: 5px 5px 50px 5px;
 
         .my-swipe .van-swipe-item, .van-empty {
             height: 240px;
@@ -169,7 +161,7 @@ export default {
 
         .van-goods-action {
             position: fixed;
-            bottom: 50px;
+            bottom: 0;
             z-index: 999;
         }
     }

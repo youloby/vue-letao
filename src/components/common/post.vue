@@ -15,31 +15,30 @@
 </template>
 
 <script>
-import { Toast, List } from 'vant';
-import { getpostlistData } from "@/api/index.js";
+import { List } from 'vant'
 export default {
-    props: ['children'],
-    data(){
-        return {
-            loading: false,
-            finished: false,
-        }
-    },
-    components: {
-        "van-list": List
-    },
-    methods: {
-        onLoad() {
-            setTimeout(() => {
-                // this.getnewslist();
-                // this.loading = false;
-                this.finished = true;
-            }, 1000);
-        },
-        showPhoto(id){
-            this.$emit("showPhoto",id);
-        }
+  props: ['children'],
+  data () {
+    return {
+      loading: false,
+      finished: false
     }
+  },
+  components: {
+    'van-list': List
+  },
+  methods: {
+    onLoad () {
+      setTimeout(() => {
+        // this.getnewslist();
+        // this.loading = false;
+        this.finished = true
+      }, 1000)
+    },
+    showPhoto (id) {
+      this.$emit('showPhoto', id)
+    }
+  }
 }
 </script>
 

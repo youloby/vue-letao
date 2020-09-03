@@ -34,59 +34,59 @@
 </template>
 
 <script>
-import { Field, Button, Toast } from 'vant';
-import { getnewsData, getcomments, postcomment } from '@/api/index.js';
+import { Field, Button, Toast } from 'vant'
+import { getnewsData, getcomments, postcomment } from '@/api/index.js'
 export default {
-    data(){
-        return {
-            newsData: "",
-            comments: [],
-            pageIndex: 0,
-            message: "",
-            isLoad: false,
-            hasComment: true
-        }
-    },
-    methods: {
-        async getData(){
-            let newsData = await getnewsData(this.$route.params.newsId);
-            this.newsData = newsData.message[0];
-        },
-        async getCommentData(){
-            if(!this.hasComment){
-                Toast("已获取所有评论");
-                return;
-            }
-            this.isLoad = true;
-            let comments = await getcomments(this.$route.params.newsId, ++this.pageIndex);
-            this.hasComment = (comments.message.length != 0);
-            this.comments = this.comments.concat(comments.message);
-            this.isLoad = false;
-        },
-        async postcomment(){
-            let msg = this.message.trim();
-            if(!msg){
-                this.message = "";
-                return;
-            }
-            let { status, message, insertId } = await postcomment(this.$route.params.newsId, this.message);
-            if(status != 0){
-                Toast(message);
-                return;
-            }
-            this.comments.unshift({user_name:"匿名用户", content:this.message, add_time:new Date(), id:insertId});
-            this.message = "";
-        }
-    },
-    created(){
-        this.$parent.title = "新闻详情";
-        this.getData();
-        this.getCommentData();
-    },
-    components: {
-        "van-field": Field,
-        "van-button": Button
+  data () {
+    return {
+      newsData: '',
+      comments: [],
+      pageIndex: 0,
+      message: '',
+      isLoad: false,
+      hasComment: true
     }
+  },
+  methods: {
+    async getData () {
+      const newsData = await getnewsData(this.$route.params.newsId)
+      this.newsData = newsData.message[0]
+    },
+    async getCommentData () {
+      if (!this.hasComment) {
+        Toast('已获取所有评论')
+        return
+      }
+      this.isLoad = true
+      const comments = await getcomments(this.$route.params.newsId, ++this.pageIndex)
+      this.hasComment = (comments.message.length !== 0)
+      this.comments = this.comments.concat(comments.message)
+      this.isLoad = false
+    },
+    async postcomment () {
+      const msg = this.message.trim()
+      if (!msg) {
+        this.message = ''
+        return
+      }
+      const { status, message, insertId } = await postcomment(this.$route.params.newsId, this.message)
+      if (status !== 0) {
+        Toast(message)
+        return
+      }
+      this.comments.unshift({ user_name: '匿名用户', content: this.message, add_time: new Date(), id: insertId })
+      this.message = ''
+    }
+  },
+  created () {
+    this.$parent.title = '新闻详情'
+    this.getData()
+    this.getCommentData()
+  },
+  components: {
+    'van-field': Field,
+    'van-button': Button
+  }
 }
 </script>
 

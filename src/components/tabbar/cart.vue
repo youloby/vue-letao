@@ -1,75 +1,114 @@
 <template>
     <div class="cart-container">
+        <div v-show="!isEmpty">
+            <van-divider>收货地址</van-divider>
+            <van-address-list
+                v-model="chosenAddressId"
+                :list="list"
+                default-tag-text="默认"
+                @edit="onEdit"
+            />
 
-        <van-divider>收货地址</van-divider>
+            <van-divider>购买的商品</van-divider>
 
-        <van-divider>购买的商品</van-divider>
-
-        <div class="cartlist">
-            <div class="cart" v-for="(item, index) in cartData" :key="index">
-                <div class="switchButton">
-                    <van-switch v-model="cartlist[index].checked" @change="update" />
-                </div>
-                <div class="thumbImage">
-                    <img v-lazy="item.thumb_path">
-                </div>
-                <div class="info">
-                    <div class="title">{{ item.title }}</div>
-                    <div class="row">
-                        <span class="price"> &yen;{{ item.sell_price }} </span>
-                        <van-stepper v-model="cartlist[index].count" @change="update" />
-                        <van-button type="danger" @click="delCart(index)">删除</van-button>
+            <div class="cartlist">
+                <div class="cart" v-for="(item, index) in cartData" :key="item.id">
+                    <div class="switchButton">
+                        <van-switch v-model="cart[item.id].checked" @change="update(item.id, cart[item.id])" />
                     </div>
-                </div>
+                    <div class="thumbImage">
+                        <img v-lazy="item.thumb_path">
+                    </div>
+                    <div class="info">
+                        <div class="title">{{ item.title }}</div>
+                        <div class="row">
+                            <span class="price"> &yen;{{ item.sell_price }} </span>
+                            <van-stepper v-model="cart[item.id].count" @change="update(item.id, cart[item.id])" />
+                            <van-button type="danger" @click="delCart(index, item.id)">删除</van-button>
+                        </div>
+                    </div>
 
+                </div>
             </div>
+            <van-cell icon="cash-back-record" title="微信支付"/>
+            <van-submit-bar :price="$store.getters.totalPrice" button-text="提交订单" @submit="onSubmit">
+                <span>共{{$store.getters.totalNumber}}件商品</span>
+            </van-submit-bar>
+        </div>
+        <div class="empty" v-show="isEmpty">
+            <h3>亲，您的购物车为空，去 <a href="#/home">首页</a> 逛逛吧！</h3>
+            <hr>
+            <img src="@/assets/images/car.png">
+            <div><a href="#/login">登录</a>后可以同步电脑与手机购物车中的商品</div>
         </div>
     </div>
 </template>
 
 <script>
-import { Switch, Divider, Stepper, Button, } from 'vant';
-import { getshopcarlist } from '@/api/index.js';
+import { Switch, Divider, Stepper, Button, SubmitBar, AddressList, Toast, Cell } from 'vant'
+import { getshopcarlist } from '@/api/index.js'
 export default {
-    data(){
-        return {
-            cartlist: [],
-            cartData: []
+  data () {
+    return {
+      cartData: [],
+      cart: {},
+      isEmpty: false,
+      chosenAddressId: '1',
+      list: [
+        {
+          id: '1',
+          name: '张三',
+          tel: '13000000000',
+          address: '浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室',
+          isDefault: true
         }
+      ]
+    }
+  },
+  methods: {
+    async getCartData () {
+      const ids = this.$store.getters.getGoodsIds
+      if (!ids) {
+        this.isEmpty = true
+        return
+      }
+      const { message } = await getshopcarlist(ids);
+      this.cartData = message;
     },
-    methods: {
-        getCartlist(){
-            this.cartlist = JSON.parse(localStorage.getItem("cartlist")) || [];
-        },
-        async getCartlistData(){
-            let ids = this.cartlist.map(cart => cart.id);
-            if(ids.length == 0){
-                return;
-            }
-            let cartlistData = await getshopcarlist(ids.join());
-            this.cartData = cartlistData.message;
-        },
-        delCart(index){
-            this.cartlist.splice(index, 1);
-            this.cartData.splice(index, 1);
-            this.update();
-        },
-        update(){
-            localStorage.setItem("cartlist", JSON.stringify(this.cartlist));
-            this.$parent.getCartCount();
-        }
+    getCart () {
+      this.cart = this.$store.getters.getCart;
     },
-    created(){
-        this.$parent.title = "我的购物车";
-        this.getCartlist();
-        this.getCartlistData();
+    delCart (index, id) {
+      this.$store.commit('delCart', id);
+      this.cartData.splice(index, 1);
+      if(this.cartData.length === 0){
+          this.isEmpty = true;
+      }
     },
-     components: {
-         "van-switch": Switch,
-         "van-divider": Divider,
-         "van-stepper": Stepper,
-         "van-button": Button
-     }
+    onSubmit () {
+      Toast('提交订单')
+    },
+    onEdit (item, index) {
+      this.$router.push('/addAddr');
+    },
+    update (id, car) {
+      this.$store.commit('update', { id, checked: car.checked, count: car.count })
+    }
+  },
+  created () {
+    this.$parent.title = '我的购物车'
+    this.getCartData()
+    this.getCart()
+  },
+  components: {
+    'van-switch': Switch,
+    'van-divider': Divider,
+    'van-stepper': Stepper,
+    'van-button': Button,
+    'van-submit-bar': SubmitBar,
+    'van-address-list': AddressList,
+    'van-cell': Cell
+  }
 }
 </script>
 
@@ -80,6 +119,13 @@ export default {
             margin: 2px;
             color: #6f7370;
             border-color: #545e6c;
+            font-size: 16px;
+        }
+        .van-address-list {
+            padding: 12px;
+            .van-address-list__bottom {
+                display: none;
+            }
         }
         .cartlist {
             padding: 10px 5px;
@@ -124,5 +170,19 @@ export default {
             }
         }
 
+        .van-submit-bar {
+            bottom: 50px;
+        }
+
+        .empty {
+            padding-top: 20px;
+            text-align: center;
+            h3 {
+                color: #333;
+            }
+            img {
+                width: 40%;
+            }
+        }
     }
 </style>

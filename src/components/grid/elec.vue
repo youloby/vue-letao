@@ -22,40 +22,40 @@
 </template>
 
 <script>
-import { Button, Toast  } from 'vant';
-import { getgoodsListData } from '@/api/index.js';
+import { Button, Toast } from 'vant'
+import { getgoodsListData } from '@/api/index.js'
 export default {
-    data(){
-        return {
-            pageindex: 0,
-            goodsData:[],
-            isLoad: false,
-            hasData: true
-        }
-    },
-    methods: {
-        async getGoodsListData(){
-            if(!this.hasData){
-                Toast('已获取所有商品');
-                return;
-            }
-            this.isLoad = true;
-            let { message } = await getgoodsListData(++this.pageindex);
-            this.hasData = (message.length != 0);
-            this.goodsData = this.goodsData.concat(message);
-            this.isLoad = false;
-        },
-        getGoodsDetail(goodsId){
-            this.$router.push(`/goodsDetail/${goodsId}`);
-        }
-    },
-    components: {
-        "van-button": Button
-    },
-    created(){
-        this.$parent.title = "商品列表";
-        this.getGoodsListData();
+  data () {
+    return {
+      pageindex: 0,
+      goodsData: [],
+      isLoad: false,
+      hasData: true
     }
+  },
+  methods: {
+    async getGoodsListData () {
+      if (!this.hasData) {
+        Toast('已获取所有商品')
+        return
+      }
+      this.isLoad = true
+      const { message } = await getgoodsListData(++this.pageindex)
+      this.hasData = (message.length !== 0)
+      this.goodsData = this.goodsData.concat(message)
+      this.isLoad = false
+    },
+    getGoodsDetail (goodsId) {
+      this.$router.push(`/goodsDetail/${goodsId}`)
+    }
+  },
+  components: {
+    'van-button': Button
+  },
+  created () {
+    this.$parent.title = '商品列表'
+    this.getGoodsListData()
+  }
 }
 </script>
 

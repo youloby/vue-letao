@@ -12,25 +12,25 @@
 </template>
 
 <script>
-import { AddressEdit, Toast } from 'vant';
-import areaList from '@/assets/js/arealist.js';
+import { AddressEdit, Toast } from 'vant'
+import areaList from '@/assets/js/arealist.js'
 export default {
-    created(){
-        this.$parent.title = "添加地址";
-    },
-    data() {
-        return {
-            areaList
-        };
-    },
-    methods: {
-        onSave() {
-            Toast('save');
-        }
-    },
-    components: {
-        "van-address-edit": AddressEdit
+  created () {
+    this.$parent.title = '添加地址'
+  },
+  data () {
+    return {
+      areaList
     }
+  },
+  methods: {
+    onSave () {
+      Toast('save')
+    }
+  },
+  components: {
+    'van-address-edit': AddressEdit
+  }
 }
 </script>
 

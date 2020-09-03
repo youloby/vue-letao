@@ -31,78 +31,77 @@
             </div>
         </div>
 
-
     </div>
 </template>
 
 <script>
 
-import { Swipe, SwipeItem,  Grid, GridItem, Divider } from 'vant';
-import { carouselData, recommendData } from '@/api/index.js';
+import { Swipe, SwipeItem, Grid, GridItem, Divider } from 'vant'
+import { carouselData, recommendData } from '@/api/index.js'
 
 export default {
-    data(){
-        return {
-            loopData: [],
-            gridData: [
-                {img:require("@/assets/images/menu10.png"), font:"数码电器", url:"/elec"},
-                {img:require("@/assets/images/menu19.png"), font:"乐淘头条", url:"/news"},
-                {img:require("@/assets/images/menu18.png"), font:"美图欣赏", url:"/photo"},
-                {img:require("@/assets/images/menu15.png"), font:"乐淘服饰", url:"/elec"},
-                {img:require("@/assets/images/menu12.png"), font:"9.9元拼单", url:"/elec"},
-                {img:require("@/assets/images/menu13.png"), font:"乐淘超市", url:"/elec"},
-                {img:require("@/assets/images/menu16.png"), font:"物流查询", url:"/elec"},
-                {img:require("@/assets/images/menu17.png"), font:"全部", url:"/elec"},
-            ],
-            pushData: []
-        }
-    },
-    methods: {
-        headerFixed(){
-            let header = document.querySelector('.header');
-            if(!header){
-                return;
-            }
-            window.onscroll = function(e){
-                let scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
-                if(scrollTop >= header.offsetHeight){
-                    header.classList.add('fixed');
-                }else {
-                    header.classList.remove('fixed');
-                }
-            }
-        },
-        async carousel(){
-            // let res = await this.$api.get("http://api.w0824.com/api/getlunbo");
-            // this.datas = res.data.message;
-            let datas = await carouselData();
-            this.loopData = datas.message;
-        },
-        async recommend(){
-            let datas = await recommendData();
-            this.pushData = datas.message;
-        },
-        getElecList(url){
-            this.$router.push(url);
-        },
-        getGoodsDetail(goodsId){
-            this.$router.push(`/goodsDetail/${goodsId}`);
-        }
-    },
-    components: {
-        "van-swipe": Swipe,
-        "van-swipe-item": SwipeItem,
-        "van-grid": Grid,
-        "van-grid-item": GridItem,
-        "van-divider": Divider
-    },
-    created(){
-        this.$nextTick(function(){
-            this.headerFixed();
-        });
-        this.carousel();
-        this.recommend();
+  data () {
+    return {
+      loopData: [],
+      gridData: [
+        { img: require('@/assets/images/menu10.png'), font: '数码电器', url: '/elec' },
+        { img: require('@/assets/images/menu19.png'), font: '乐淘头条', url: '/news' },
+        { img: require('@/assets/images/menu18.png'), font: '美图欣赏', url: '/photo' },
+        { img: require('@/assets/images/menu15.png'), font: '乐淘服饰', url: '/elec' },
+        { img: require('@/assets/images/menu12.png'), font: '9.9元拼单', url: '/elec' },
+        { img: require('@/assets/images/menu13.png'), font: '乐淘超市', url: '/elec' },
+        { img: require('@/assets/images/menu16.png'), font: '物流查询', url: '/elec' },
+        { img: require('@/assets/images/menu17.png'), font: '全部', url: '/elec' }
+      ],
+      pushData: []
     }
+  },
+  methods: {
+    headerFixed () {
+      const header = document.querySelector('.header')
+      if (!header) {
+        return
+      }
+      window.onscroll = function (e) {
+        const scrollTop = document.body.scrollTop || document.documentElement.scrollTop
+        if (scrollTop >= header.offsetHeight) {
+          header.classList.add('fixed')
+        } else {
+          header.classList.remove('fixed')
+        }
+      }
+    },
+    async carousel () {
+      // let res = await this.$api.get("http://api.w0824.com/api/getlunbo");
+      // this.datas = res.data.message;
+      const datas = await carouselData()
+      this.loopData = datas.message
+    },
+    async recommend () {
+      const datas = await recommendData()
+      this.pushData = datas.message
+    },
+    getElecList (url) {
+      this.$router.push(url)
+    },
+    getGoodsDetail (goodsId) {
+      this.$router.push(`/goodsDetail/${goodsId}`)
+    }
+  },
+  components: {
+    'van-swipe': Swipe,
+    'van-swipe-item': SwipeItem,
+    'van-grid': Grid,
+    'van-grid-item': GridItem,
+    'van-divider': Divider
+  },
+  created () {
+    this.$nextTick(function () {
+      this.headerFixed()
+    })
+    this.carousel()
+    this.recommend()
+  }
 }
 </script>
 
