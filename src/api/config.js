@@ -1,4 +1,6 @@
-import axios from 'axios'
+import axios from 'axios';
+import router from '@/router/index.js';
+import { Toast } from 'vant';
 
 const instance = axios.create({
   baseURL: 'http://api.w0824.com/api'
@@ -19,7 +21,17 @@ instance.interceptors.response.use(function (response) {
   return response.data
 }, function (error) {
   // 对响应错误做点什么
-  return Promise.reject(error)
+    let status = error.response.status;
+    let message = error.response.data.message;
+    switch(status){
+        case 401:
+            Toast(message);
+            router.push('/login');
+            break;
+        default:
+            Toast('网络错误，请稍后再试');
+    }
+    // return Promise.reject(error)
 })
 
 export default instance

@@ -7,7 +7,19 @@ import axios from 'axios'
 import { Lazyload } from 'vant'
 
 import '@/util/filter.js'
-import store from '@/store/cartStore.js'
+
+import Vuex from 'vuex';
+import cartStore from './store/cartStore';
+import userStore from './store/userStore';
+import toolStore from './store/toolStore';
+Vue.use(Vuex);
+const store = new Vuex.Store({
+    modules: {
+        cartStore,
+        userStore,
+        toolStore
+    }
+})
 
 Vue.config.productionTip = false
 Vue.prototype.$api = axios

@@ -3,7 +3,7 @@
         <van-cell-group>
             <van-cell>
                 <img src="@/assets/images/logo.png">
-                <div class="name">用户名：loby</div>
+                <div class="name">用户名：{{ $store.state.userStore.user.username }}</div>
             </van-cell>
             <van-cell title="修改密码" is-link />
             <van-cell title="我的订单" is-link />
@@ -17,28 +17,30 @@
 </template>
 
 <script>
-import { Cell, CellGroup, Button, Dialog, Toast } from 'vant'
+import { Cell, CellGroup, Button, Dialog, Toast } from 'vant';
+
 export default {
-  created () {
-    this.$parent.title = '个人中心'
-  },
-  components: {
-    'van-cell': Cell,
-    'van-cell-group': CellGroup,
-    'van-button': Button
-  },
-  methods: {
-    logout () {
-      Dialog.confirm({
-        message: '确认退出登录？',
-        confirmButtonColor: '#1989fa'
-      }).then(() => {
-        Toast('确认')
-      }).catch(() => {
-        Toast('取消')
-      })
+    components: {
+        'van-cell': Cell,
+        'van-cell-group': CellGroup,
+        'van-button': Button
+    },
+    methods: {
+        logout () {
+            Dialog.confirm({
+                message: '确认退出登录？',
+                confirmButtonColor: '#1989fa'
+            }).then(() => {
+                localStorage.removeItem('token');
+                this.$router.push('/login');
+            }).catch(() => {
+                Toast('取消')
+            })
+        }
+    },
+    created () {
+        this.$parent.title = '个人中心';
     }
-  }
 }
 </script>
 

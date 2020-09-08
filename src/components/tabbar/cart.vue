@@ -46,7 +46,7 @@
 
 <script>
 import { Switch, Divider, Stepper, Button, SubmitBar, AddressList, Toast, Cell } from 'vant'
-import { getshopcarlist } from '@/api/index.js'
+import { getshopcarlist, getaddress } from '@/api/index.js'
 export default {
   data () {
     return {
@@ -54,15 +54,7 @@ export default {
       cart: {},
       isEmpty: false,
       chosenAddressId: '1',
-      list: [
-        {
-          id: '1',
-          name: '张三',
-          tel: '13000000000',
-          address: '浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室',
-          isDefault: true
-        }
-      ]
+      list: []
     }
   },
   methods: {
@@ -88,17 +80,29 @@ export default {
     onSubmit () {
       Toast('提交订单')
     },
-    onEdit (item, index) {
-      this.$router.push('/addAddr');
+    onEdit (item) {
+      this.$router.push(`/editAddr/${JSON.stringify(item)}`);
     },
     update (id, car) {
       this.$store.commit('update', { id, checked: car.checked, count: car.count })
+    },
+    async getaddrlist(){
+        let list = await getaddress(this.$store.state.userStore.user.id);
+        list.map(v => {
+            v.address = `${(v.province !== v.city ?v.province :'') + v.city+v.country} ${v.addressDetail}`;
+            v.isDefault = !!v.isDefault;
+            if(v.isDefault){
+                this.chosenAddressId = v.id;
+            }
+        });
+        this.list = list;
     }
   },
   created () {
-    this.$parent.title = '我的购物车'
-    this.getCartData()
-    this.getCart()
+    this.$parent.title = '我的购物车';
+    this.getCartData();
+    this.getCart();
+    this.getaddrlist();
   },
   components: {
     'van-switch': Switch,

@@ -11,10 +11,13 @@
 </template>
 
 <script>
-import { AddressList, Toast } from 'vant'
+import { AddressList, Toast } from 'vant';
+import { getaddress } from '@/api/index.js';
+
 export default {
   created () {
-    this.$parent.title = '地址管理'
+    this.$parent.title = '地址管理';
+    this.getaddrlist();
   },
   components: {
     'van-address-list': AddressList
@@ -22,29 +25,26 @@ export default {
   data () {
     return {
       chosenAddressId: '1',
-      list: [
-        {
-          id: '1',
-          name: '张三',
-          tel: '13000000000',
-          address: '浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室',
-          isDefault: true
-        },
-        {
-          id: '2',
-          name: '李四',
-          tel: '1310000000',
-          address: '浙江省杭州市拱墅区莫干山路 50 号'
-        }
-      ]
+      list: []
     }
   },
   methods: {
     onAdd () {
       this.$router.push('/addAddr')
     },
-    onEdit (item, index) {
-      Toast('编辑地址:' + index)
+    onEdit (item) {
+      this.$router.push(`/editAddr/${JSON.stringify(item)}`);
+    },
+    async getaddrlist(){
+        let list = await getaddress(this.$store.state.userStore.user.id);
+        list.map(v => {
+            v.address = `${(v.province !== v.city ?v.province :'') + v.city+v.country} ${v.addressDetail}`;
+            v.isDefault = !!v.isDefault;
+            if(v.isDefault){
+                this.chosenAddressId = v.id;
+            }
+        });
+        this.list = list;
     }
   }
 }

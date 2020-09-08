@@ -15,21 +15,21 @@
             <router-view></router-view>
         </div>
 
-        <van-tabbar v-model="active" v-show="!isUser">
+        <van-tabbar v-model="$store.state.toolStore.active" v-show="!isUser">
             <van-tabbar-item icon="wap-home-o" to="/home">首页</van-tabbar-item>
             <van-tabbar-item icon="cart-o" to="/cart" :badge="$store.getters.totalCount">购物车</van-tabbar-item>
-            <van-tabbar-item icon="user-o" to="/user">我的乐淘</van-tabbar-item>
+            <van-tabbar-item icon="user-o" @click="isLogin">我的乐淘</van-tabbar-item>
         </van-tabbar>
     </div>
 </template>
 
 <script>
-import { Search, Tabbar, TabbarItem, NavBar, Sticky } from 'vant'
+import { Search, Tabbar, TabbarItem, NavBar, Sticky } from 'vant';
+import { checktoken } from '@/api/index.js';
 
 export default {
   data () {
     return {
-      active: 0,
       title: '',
       userPath: ['/user', '/addr', '/goodsDetail']
     }
@@ -48,6 +48,12 @@ export default {
     'van-tabbar-item': TabbarItem,
     'van-nav-bar': NavBar,
     'van-sticky': Sticky
+  },
+  methods: {
+    isLogin(){
+        checktoken();
+        this.$router.push('/user')
+    }
   },
   beforeCreate () {
     document.getElementsByTagName('body')[0].setAttribute('style', 'background-color:#eee')

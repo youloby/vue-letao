@@ -1,9 +1,5 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-Vue.use(Vuex)
-
 const cartlist = JSON.parse(localStorage.getItem('cartlist')) || []
-const Store = new Vuex.Store({
+const cartStore = {
   state: {
     cartlist
   },
@@ -68,6 +64,6 @@ const Store = new Vuex.Store({
     }
   }
 
-})
+}
 
-export default Store
+export default cartStore;

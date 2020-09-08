@@ -48,3 +48,39 @@ export async function getcategory () {
 export async function getcatelist (id) {
   return await instance.get(`/getcatelist/${id}`)
 }
+
+//注册
+export async function register (username, password) {
+    return await instance.post('/register', {username, password});
+}
+
+//登录
+export async function login (username, password) {
+    return await instance.post('/login', {username, password});
+}
+
+//验证token
+export async function checktoken () {
+    let  token = localStorage.getItem('token');
+    await instance.post(`/checktoken?token=${token}`);
+}
+
+//获取用户地址列表
+export async function getaddress (userId) {
+    return await instance.get(`/getaddress/${userId}`);
+}
+
+//添加用户地址
+export async function addaddress (userId, userInfo) {
+    return await instance.post(`/addaddress/${userId}`, userInfo);
+}
+
+//编辑用户地址
+export async function updateaddress (addrId, addrInfo) {
+    return await instance.post(`/updateaddress/${addrId}`, addrInfo);
+}
+
+//删除用户地址
+export async function deladdress (addrId) {
+    return await instance.post(`/deladdress/${addrId}`);
+}

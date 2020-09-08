@@ -3,7 +3,7 @@
         <van-form @submit="onSubmit">
             <van-field
                 v-model="username"
-                name="用户名"
+                name="username"
                 label="用户名"
                 placeholder="用户名"
                 :rules="[{ required: true, message: '请填写用户名' }]"
@@ -11,7 +11,7 @@
             <van-field
                 v-model="password"
                 type="password"
-                name="密码"
+                name="password"
                 label="密码"
                 placeholder="密码"
                 :rules="[{ required: true, message: '请填写密码' }]"
@@ -19,7 +19,7 @@
             <van-field
                 v-model="confirm"
                 type="password"
-                name="密码"
+                name="confirm"
                 label="确认密码"
                 placeholder="密码"
                 :rules="[{ required: true, message: '请填写确认密码' }]"
@@ -37,7 +37,9 @@
 </template>
 
 <script>
-import { Form, Field, Button } from 'vant'
+import { Form, Field, Button } from 'vant';
+import { register } from '@/api/index.js';
+
 export default {
   data () {
     return {
@@ -47,11 +49,19 @@ export default {
     }
   },
   methods: {
-    onSubmit (values) {
-      console.log('submit', values)
+    async onSubmit (values) {
+        if(values.password !== values.confirm){
+            this.$toast('输入的密码不相同');
+            return;
+        }
+        let { status, message } = await register(values.username, values.password);
+        this.$toast(message);
+        if(status === 0){
+            this.login();
+        }
     },
     login () {
-      this.$router.push('/login')
+      this.$router.push('/login');
     }
   },
   created () {
