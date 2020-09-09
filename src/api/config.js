@@ -12,9 +12,18 @@ const instance = axios.create({
 // 添加请求拦截器
 instance.interceptors.request.use(async function (config) {
   // 在发送请求之前做些什么
-  store.commit('changePending', true);
-  await sleep(500);
-  return config
+
+    // 设置自定义请求头(authorized-要求是https)携带token到后台，方便后台进行验证
+    var token = localStorage.getItem('token') || '';
+    token && (config.headers.token = token)
+    // If-Modified-Since 是标准的HTTP请求头标签，在发送HTTP请求时，
+    // 把浏览器端缓存页面的最后修改时间一起发到服务器去，服务器会把这个时间与服务器上实际文件的最后修改时间进行比较
+    config.headers['If-Modified-Since'] = 0; //设置请求头，告诉服务端不要缓存，获取最新数据
+
+    store.commit('changePending', true);
+    await sleep(500);
+    return config
+
 }, function (error) {
   // 对请求错误做些什么
   return Promise.reject(error)
