@@ -40,6 +40,7 @@ import { Swipe, SwipeItem, Grid, GridItem, Divider } from 'vant'
 import { carouselData, recommendData } from '@/api/index.js'
 
 export default {
+    name: "home-component",
   data () {
     return {
       loopData: [],

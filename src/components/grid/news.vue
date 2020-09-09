@@ -21,6 +21,7 @@
 import { PullRefresh, Toast, List } from 'vant'
 import { getnewslistData } from '@/api/index.js'
 export default {
+    name: "news-component",
   data () {
     return {
       page: 0,
@@ -34,28 +35,28 @@ export default {
   methods: {
     async getnewslist () {
       if (this.finished) {
-        return
+        return;
       }
-      const newslistData = await getnewslistData(++this.page, this.pagesize)
+      const newslistData = await getnewslistData(++this.page, this.pagesize);
       if (newslistData.message.length === 0) {
-        this.finished = true
+        this.finished = true;
       }
-      this.newsData = this.page === 1 ? newslistData.message : this.newsData.concat(newslistData.message)
+      this.newsData = this.page === 1 ? newslistData.message : this.newsData.concat(newslistData.message);
     },
     onRefresh () {
       setTimeout(() => {
-        this.page = 0
-        this.newsData.splice(6, this.newsData.length)
-        this.finished = false
-        this.getnewslist()
-        Toast('刷新成功')
-        this.isLoading = false
+        this.page = 0;
+        this.newsData.splice(6, this.newsData.length);
+        this.finished = false;
+        this.getnewslist();
+        Toast('刷新成功');
+        this.isLoading = false;
       }, 500)
     },
     onLoad () {
       setTimeout(() => {
-        this.getnewslist()
-        this.loading = false
+        this.getnewslist();
+        this.loading = false;
       }, 1000)
     },
     getNewsDetail (newsId) {
@@ -67,8 +68,11 @@ export default {
     'van-list': List
   },
   created () {
-    this.$parent.title = '新闻列表'
-    this.getnewslist()
+    this.$parent.title = '新闻列表';
+    this.getnewslist();
+  },
+  activated(){
+      this.$parent.title = '新闻列表';
   }
 }
 </script>

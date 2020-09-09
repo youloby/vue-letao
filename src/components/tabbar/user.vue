@@ -6,7 +6,7 @@
                 <div class="name">用户名：{{ $store.state.userStore.user.username }}</div>
             </van-cell>
             <van-cell title="修改密码" is-link />
-            <van-cell title="我的订单" is-link />
+            <van-cell title="我的订单" is-link to="/order" />
             <van-cell title="地址管理" is-link to="/addr" />
         </van-cell-group>
         <van-cell title="提交反馈" is-link />
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { Cell, CellGroup, Button, Dialog, Toast } from 'vant';
+import { Cell, CellGroup, Button, Dialog } from 'vant';
 
 export default {
     components: {
@@ -34,7 +34,7 @@ export default {
                 localStorage.removeItem('token');
                 this.$router.push('/login');
             }).catch(() => {
-                Toast('取消')
+                this.$toast('取消');
             })
         }
     },

@@ -3,7 +3,6 @@
         <van-address-list
             v-model="chosenAddressId"
             :list="list"
-            default-tag-text="默认"
             @add="onAdd"
             @edit="onEdit"
         />
@@ -11,7 +10,7 @@
 </template>
 
 <script>
-import { AddressList, Toast } from 'vant';
+import { AddressList } from 'vant';
 import { getaddress } from '@/api/index.js';
 
 export default {

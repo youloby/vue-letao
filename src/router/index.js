@@ -9,11 +9,12 @@ import news from '@/components/grid/news.vue'
 import photo from '@/components/grid/photo.vue'
 import newsDetail from '@/components/detail/newsDetail.vue'
 import goodsDetail from '@/components/detail/goodsDetail.vue'
-import addr from '@/components/user/addr.vue'
-import addAddr from '@/components/user/addAddr.vue'
-import editAddr from '@/components/user/editAddr.vue'
+import addr from '@/components/addr/addr.vue'
+import addAddr from '@/components/addr/addAddr.vue'
+import editAddr from '@/components/addr/editAddr.vue'
 import login from '@/components/user/login.vue'
 import register from '@/components/user/register.vue'
+import order from '@/components/order/order.vue'
 
 Vue.use(VueRouter)
 
@@ -32,30 +33,12 @@ const router = new VueRouter({
     { path: '/addAddr', component: addAddr },
     { path: '/editAddr/:addrInfo', component: editAddr },
     { path: '/login', component: login },
-    { path: '/register', component: register }
+    { path: '/register', component: register },
+    { path: '/order', component: order }
   ]
 });
-import toolStore from '@/store/toolStore';
+
 router.beforeEach((to, from, next) => {
-    let active = -1;
-    // if(!['/home', '/cart', '/user'].includes(to.path)){
-    //     toolStore.state.active = active;
-    // }
-    switch(to.path){
-        case '/home':
-            active = 0;
-            break;
-        case '/cart':
-            active = 1;
-            break;
-        case '/user':
-            active = 2;
-            break;
-        default:
-            active = -1;
-            break;
-    }
-    toolStore.state.active = active;
     next();
 });
 

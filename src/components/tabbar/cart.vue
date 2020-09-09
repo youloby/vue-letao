@@ -5,7 +5,6 @@
             <van-address-list
                 v-model="chosenAddressId"
                 :list="list"
-                default-tag-text="默认"
                 @edit="onEdit"
             />
 
@@ -45,7 +44,7 @@
 </template>
 
 <script>
-import { Switch, Divider, Stepper, Button, SubmitBar, AddressList, Toast, Cell } from 'vant'
+import { Switch, Divider, Stepper, Button, SubmitBar, AddressList, Cell } from 'vant'
 import { getshopcarlist, getaddress } from '@/api/index.js'
 export default {
   data () {
@@ -78,7 +77,7 @@ export default {
       }
     },
     onSubmit () {
-      Toast('提交订单')
+      this.$toast('提交订单')
     },
     onEdit (item) {
       this.$router.push(`/editAddr/${JSON.stringify(item)}`);
@@ -87,6 +86,10 @@ export default {
       this.$store.commit('update', { id, checked: car.checked, count: car.count })
     },
     async getaddrlist(){
+        if(!this.$store.state.userStore.user){
+            this.$toast('当前状态未登录');
+            return;
+        }
         let list = await getaddress(this.$store.state.userStore.user.id);
         list.map(v => {
             v.address = `${(v.province !== v.city ?v.province :'') + v.city+v.country} ${v.addressDetail}`;
@@ -118,7 +121,7 @@ export default {
 
 <style lang="scss" scoped>
     .cart-container {
-        margin-bottom: 50px;
+        margin-bottom: 104px;
         .van-divider {
             margin: 2px;
             color: #6f7370;

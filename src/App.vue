@@ -12,10 +12,12 @@
         </div>
 
         <div class="content">
-            <router-view></router-view>
+            <keep-alive include="home-component,elec-component,news-component,photo-component">
+                <router-view></router-view>
+            </keep-alive>
         </div>
 
-        <van-tabbar v-model="$store.state.toolStore.active" v-show="!isUser">
+        <van-tabbar v-model="active" v-show="!isUser">
             <van-tabbar-item icon="wap-home-o" to="/home">首页</van-tabbar-item>
             <van-tabbar-item icon="cart-o" to="/cart" :badge="$store.getters.totalCount">购物车</van-tabbar-item>
             <van-tabbar-item icon="user-o" @click="isLogin">我的乐淘</van-tabbar-item>
@@ -26,12 +28,14 @@
 <script>
 import { Search, Tabbar, TabbarItem, NavBar, Sticky } from 'vant';
 import { checktoken } from '@/api/index.js';
+import { mapState } from 'vuex';
 
 export default {
   data () {
     return {
       title: '',
-      userPath: ['/user', '/addr', '/goodsDetail']
+      active: 0,
+      userPath: ['/user', '/addr', '/goodsDetail', '/order']
     }
   },
   computed: {
@@ -40,7 +44,18 @@ export default {
     },
     isUser () {
       return this.userPath.includes(/\/\w+\/?/.exec(this.$route.path)[0])
-    }
+    },
+    ...mapState(['isPending'])
+  },
+  watch: {
+        "isPending": function(isPending){
+            isPending
+            ? this.$toast.loading({
+                message: '加载中...',
+                forbidClick: true,
+            })
+            : this.$toast.clear();
+        }
   },
   components: {
     'van-search': Search,

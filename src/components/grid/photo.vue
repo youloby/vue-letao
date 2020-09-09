@@ -16,6 +16,7 @@ import { TreeSelect, ImagePreview } from 'vant'
 import { getcategory, getcatelist, getthumbimages } from '@/api/index.js'
 import post from '@/components/common/post.vue'
 export default {
+    name: "photo-component",
   data () {
     return {
       activeIds: 1,
@@ -30,34 +31,37 @@ export default {
   },
   methods: {
     async getcategoryData () {
-      const { message } = await getcategory()
+      const { message } = await getcategory();
       this.items = message.map(v => {
-        return { id: v.id, text: v.title }
+        return { id: v.id, text: v.title };
       })
-      this.getcatelist(0, this.items[0].id)
+      this.getcatelist(0, this.items[0].id);
     },
     async getcatelist (index, id) {
       if (this.items[index].children) {
-        return
+        return;
       }
-      this.isShow = false
-      const { message } = await getcatelist(id)
-      this.items[index].children = message.map(v => v)
-      this.isShow = true
+      this.isShow = false;
+      const { message } = await getcatelist(id);
+      this.items[index].children = message.map(v => v);
+      this.isShow = true;
     },
     async showPhoto (id) {
-      const { message } = await getthumbimages(id)
-      const imgs = message.map(v => v.src)
+      const { message } = await getthumbimages(id);
+      const imgs = message.map(v => v.src);
       if (!imgs.length) {
-        this.$toast('还没有上传图片哦~')
-        return
+        this.$toast('还没有上传图片哦~');
+        return;
       }
-      ImagePreview(imgs)
+      ImagePreview(imgs);
     }
   },
   created () {
-    this.$parent.title = '美图欣赏'
-    this.getcategoryData()
+    this.$parent.title = '美图欣赏';
+    this.getcategoryData();
+  },
+  activated() {
+      this.$parent.title = '美图欣赏';
   }
 }
 </script>

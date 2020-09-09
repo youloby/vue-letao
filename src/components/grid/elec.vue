@@ -25,6 +25,7 @@
 import { Button, Toast } from 'vant'
 import { getgoodsListData } from '@/api/index.js'
 export default {
+    name: "elec-component",
   data () {
     return {
       pageindex: 0,
@@ -55,6 +56,9 @@ export default {
   created () {
     this.$parent.title = '商品列表'
     this.getGoodsListData()
+  },
+  activated(){
+      this.$parent.title = '商品列表';
   }
 }
 </script>

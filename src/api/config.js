@@ -1,14 +1,19 @@
 import axios from 'axios';
 import router from '@/router/index.js';
 import { Toast } from 'vant';
+import store from '@/store/store.js';
+// import { setTimeout } from 'core-js';
+import { sleep } from '@/util/tool.js';
 
 const instance = axios.create({
   baseURL: 'http://api.w0824.com/api'
 })
 
 // 添加请求拦截器
-instance.interceptors.request.use(function (config) {
+instance.interceptors.request.use(async function (config) {
   // 在发送请求之前做些什么
+  store.commit('changePending', true);
+  await sleep(500);
   return config
 }, function (error) {
   // 对请求错误做些什么
@@ -18,6 +23,7 @@ instance.interceptors.request.use(function (config) {
 // 添加响应拦截器
 instance.interceptors.response.use(function (response) {
   // 对响应数据做点什么
+  store.commit('changePending', false);
   return response.data
 }, function (error) {
   // 对响应错误做点什么
