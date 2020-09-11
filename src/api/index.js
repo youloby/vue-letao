@@ -31,7 +31,7 @@ export async function postcomment (newsId, content) {
 export async function getthumbimages (id) {
   return await instance.get(`/getthumbimages/${id}`)
 }
-
+//获取商品详情
 export async function getgoodsinfo (goodsId) {
   return await instance.get(`/getgoodsinfo/${goodsId}`)
 }
@@ -83,4 +83,13 @@ export async function updateaddress (addrId, addrInfo) {
 //删除用户地址
 export async function deladdress (addrId) {
     return await instance.post(`/deladdress/${addrId}`);
+}
+//提交订单
+export async function commitorder (orderInfo) {
+    return await instance.post('/commitorder', orderInfo);
+}
+
+//获取用户订单
+export async function userorder (userId) {
+    return await instance.post(`/userorder/${userId}`);
 }

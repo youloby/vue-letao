@@ -44,8 +44,10 @@
 </template>
 
 <script>
-import { Switch, Divider, Stepper, Button, SubmitBar, AddressList, Cell } from 'vant'
-import { getshopcarlist, getaddress } from '@/api/index.js'
+import { Switch, Divider, Stepper, Button, SubmitBar, AddressList, Cell } from 'vant';
+import { getshopcarlist, getaddress, commitorder } from '@/api/index.js';
+import { genOrderId } from '@/util/tool.js';
+
 export default {
   data () {
     return {
@@ -70,14 +72,45 @@ export default {
       this.cart = this.$store.getters.getCart;
     },
     delCart (index, id) {
+      if(index == -1){
+          index = this.cartData.indexOf(v => v.id===id);
+      }
       this.$store.commit('delCart', id);
       this.cartData.splice(index, 1);
       if(this.cartData.length === 0){
           this.isEmpty = true;
       }
     },
-    onSubmit () {
-      this.$toast('提交订单')
+    async onSubmit () {
+        let ids = this.$store.getters.getBuyIds;
+        let orderInfo = {
+            user_id: this.$store.state.userStore.user.id,
+            order_id: genOrderId(),
+            address_id: this.list[0].id,
+            total_price: this.$store.getters.totalPrice/100,
+            number: this.$store.getters.totalNumber,
+            goods_ids: ids.join()
+        }
+
+        let  _this = this;
+        this.$toast.loading({
+            message: '加载中...',
+            forbidClick: true,
+            duration:3000,
+            onClose(){
+                Dialog.alert({
+                    message: '支付是否完成',
+                }).then(() => {
+                    _this.$router.push('/order');
+                });
+            }
+        });
+        let res = await commitorder(orderInfo);
+        var weixinpayurl = res.data;
+        location.href = weixinpayurl;
+        ids.map(v => {
+            this.delCart(-1, v);
+        });
     },
     onEdit (item) {
       this.$router.push(`/editAddr/${JSON.stringify(item)}`);

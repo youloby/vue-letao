@@ -5,8 +5,9 @@ import store from '@/store/store.js';
 // import { setTimeout } from 'core-js';
 import { sleep } from '@/util/tool.js';
 
+let apiUrl = process.env.NODE_ENV === 'development' ?'http://127.0.0.1:3000/api' :'http://api.w0824.com/api';
 const instance = axios.create({
-  baseURL: 'http://api.w0824.com/api'
+  baseURL: apiUrl
 })
 
 // 添加请求拦截器

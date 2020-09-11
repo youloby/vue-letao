@@ -32,6 +32,15 @@ const cartStore = {
       const ids = state.cartlist.map(cart => cart.id)
       return ids.join()
     },
+    getBuyIds (state) {
+        const ids = [];
+        state.cartlist.map(cart => {
+            if(cart.checked){
+                ids.push(cart.id);
+            }
+        });
+        return ids;
+    },
     totalCount (state) {
       let totalCount = 0
       state.cartlist.map(v => { totalCount += v.count })
